@@ -33,13 +33,15 @@ game_clock = pygame.time.Clock()
 
 snake_x = 10
 snake_y = 10
-snake_length = 10
+snake_length = 1
+snake_block_length = 10
 apple_x = random.randrange(0,SCREEN_WIDTH,10)
 apple_y = random.randrange(0,SCREEN_HEIGHT,10)
+snake_body = []
+#snake_body.append([snake_x, snake_y])
 
 while game_continue:
     for event in pygame.event.get():
-        #print(event.type)
         if(event.type == pygame.QUIT):
             game_continue = False
         if(event.type == pygame.KEYDOWN):
@@ -69,10 +71,23 @@ while game_continue:
         snake_y = 0
     if(snake_x == apple_x and snake_y == apple_y):
         apple_x = random.randrange(0,SCREEN_WIDTH,10)
-        apple_y = random.randrange(0,SCREEN_HEIGHT,10) 
+        apple_y = random.randrange(0,SCREEN_HEIGHT,10)
+        snake_length += 1
+
+    snake_body.append([snake_x,snake_y])
+    if len(snake_body) > snake_length:
+        del snake_body[0] 
+    
+
+        
     game_canvas.fill(GREEN)
-    game_canvas.fill(BLACK,rect = [snake_x,snake_y,10,snake_length])
     game_canvas.fill(RED,rect = [apple_x,apple_y,10,10])
+    pygame.display.update()
+    for XnY in snake_body:
+        game_canvas.fill(BLACK,rect = [XnY[0],XnY[1],10,snake_block_length])
+        #pygame.draw.rect(game_canvas, BLACK, [XnY[0],XnY[1],snake_block_length,snake_block_length])
+
+
     pygame.display.update()
     game_clock.tick(GAME_FPS)
 
