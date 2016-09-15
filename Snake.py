@@ -9,28 +9,38 @@ RED = (255,0,0)
 GREEN = (0,200,0)
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
-GAME_FPS = 16
+GAME_FPS = 30
 
 pygame.init()
+
+#Display initialisation
 game_canvas = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
+
+#Display title 
 pygame.display.set_caption('SNAKE - RECREATION')
 
-# Decides whether the game loop will continue
+# Game Loop driver
 game_continue = True
 
 # Set the initial key status
 key_continue = pygame.K_DOWN
 
+#Set text font for in game messages
 game_font = pygame.font.SysFont(None,25)
 
+#Function that will blit in game messages on the screen
 def message_to_screen(message,color):
     screen_text = game_font.render(message,True,color)
     game_canvas.blit(screen_text,[SCREEN_WIDTH/2,SCREEN_HEIGHT/2])
 
+#Set green background and update the display
 game_canvas.fill(GREEN)
 pygame.display.update()
+
+#Get clock object to make game run at a particular FPS rate
 game_clock = pygame.time.Clock()
 
+#Set starting points of snake and other snake and apple parameters
 snake_x = 10
 snake_y = 10
 snake_length = 1
@@ -38,7 +48,6 @@ snake_block_length = 10
 apple_x = random.randrange(0,SCREEN_WIDTH,10)
 apple_y = random.randrange(0,SCREEN_HEIGHT,10)
 snake_body = []
-#snake_body.append([snake_x, snake_y])
 
 while game_continue:
     for event in pygame.event.get():
@@ -75,23 +84,30 @@ while game_continue:
         snake_length += 1
 
     snake_body.append([snake_x,snake_y])
+
+    #Doing this makes the snake bend when the length if sufficiently large
     if len(snake_body) > snake_length:
         del snake_body[0] 
     
-
+    #Exit if snake head coordinates are found twice in the snake body list since it will mean that collision has occurred
     if snake_body.count(snake_body[0]) > 1:
-        game_continue = False    
+        game_continue = False
+
+
     game_canvas.fill(GREEN)
     game_canvas.fill(RED,rect = [apple_x,apple_y,10,10])
     pygame.display.update()
+
+
     for XnY in snake_body:
         game_canvas.fill(BLACK,rect = [XnY[0],XnY[1],10,snake_block_length])
-        #pygame.draw.rect(game_canvas, BLACK, [XnY[0],XnY[1],snake_block_length,snake_block_length])
 
 
     pygame.display.update()
     game_clock.tick(GAME_FPS)
 
+
+#Game over messages
 message_to_screen("See You Next Time!", BLACK)
 pygame.display.update()
 time.sleep(2)
