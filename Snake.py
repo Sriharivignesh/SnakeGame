@@ -79,7 +79,8 @@ while game_continue:
         del snake_body[0] 
     
 
-        
+    if snake_body.count(snake_body[0]) > 1:
+        game_continue = False    
     game_canvas.fill(GREEN)
     game_canvas.fill(RED,rect = [apple_x,apple_y,10,10])
     pygame.display.update()
